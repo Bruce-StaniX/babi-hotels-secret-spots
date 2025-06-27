@@ -1,90 +1,126 @@
 
-import { Button } from "@/components/ui/button";
-import { Home, Search, Heart, User, Menu } from "lucide-react";
-import { useState } from "react";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
+import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield } from 'lucide-react';
+import LanguageSwitch from './LanguageSwitch';
+import ModeSelector from './ModeSelector';
+import { useAppMode } from '@/hooks/useAppMode';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { mode, language, setMode, setLanguage, isPrivacyModeActive } = useAppMode();
+
+  const menuItems = [
+    { icon: Search, label: 'Recherche', labelNouchi: 'Chercher', href: '#' },
+    { icon: Heart, label: 'Favoris', labelNouchi: 'Mes favoris', href: '#' },
+    { icon: MessageCircle, label: 'Messages', labelNouchi: 'Messages', href: '#' },
+    { icon: MapPin, label: 'Carte', labelNouchi: 'Map', href: '#' },
+    { icon: User, label: 'Profil', labelNouchi: 'Mon profil', href: '#' },
+  ];
+
+  const getLabel = (item: any) => language === 'nouchi' ? item.labelNouchi : item.label;
 
   return (
     <>
       {/* Top Navigation */}
-      <nav className="bg-white/95 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+      <nav className="sticky top-0 z-50 glass-morphism border-b border-border/20">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 gradient-ivorian rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-lg">H</span>
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">H</span>
               </div>
-              <span className="text-xl font-bold text-gray-800">Hotro de Babi</span>
+              <div>
+                <h1 className="text-lg font-bold text-foreground">Hotro de Babi</h1>
+                {isPrivacyModeActive && (
+                  <Badge variant="destructive" className="text-xs">
+                    <Shield className="w-3 h-3 mr-1" />
+                    Mode Privé
+                  </Badge>
+                )}
+              </div>
             </div>
 
-            <div className="hidden md:flex items-center space-x-6">
-              <Button variant="ghost" className="text-gray-600 hover:text-ivorian-orange">
-                Accueil
-              </Button>
-              <Button variant="ghost" className="text-gray-600 hover:text-ivorian-orange">
-                Hébergements
-              </Button>
-              <Button variant="ghost" className="text-gray-600 hover:text-ivorian-orange">
-                Favoris
-              </Button>
-              <Button className="gradient-ivorian text-white">
-                Se connecter
-              </Button>
-            </div>
+            {/* Right side */}
+            <div className="flex items-center space-x-3">
+              <LanguageSwitch 
+                currentLanguage={language}
+                onLanguageChange={setLanguage}
+              />
+              
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <Menu className="w-5 h-5" />
+                    {mode !== 'normal' && (
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"></div>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-80 glass-morphism">
+                  <div className="space-y-6 mt-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Menu</h3>
+                      <div className="space-y-2">
+                        {menuItems.map((item) => {
+                          const IconComponent = item.icon;
+                          return (
+                            <Button
+                              key={item.href}
+                              variant="ghost"
+                              className="w-full justify-start motion-blur"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              <IconComponent className="w-4 h-4 mr-3" />
+                              {getLabel(item)}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="h-6 w-6" />
-            </Button>
+                    <div className="border-t border-border pt-6">
+                      <ModeSelector currentMode={mode} onModeChange={setMode} />
+                    </div>
+
+                    <div className="border-t border-border pt-6">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-muted-foreground"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Settings className="w-4 h-4 mr-3" />
+                        {language === 'nouchi' ? 'Paramètres' : 'Paramètres'}
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
-              <div className="flex flex-col space-y-2">
-                <Button variant="ghost" className="justify-start text-gray-600">
-                  Accueil
-                </Button>
-                <Button variant="ghost" className="justify-start text-gray-600">
-                  Hébergements
-                </Button>
-                <Button variant="ghost" className="justify-start text-gray-600">
-                  Favoris
-                </Button>
-                <Button className="gradient-ivorian text-white">
-                  Se connecter
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
 
-      {/* Bottom Navigation for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+      {/* Bottom Navigation (Mobile) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden glass-morphism border-t border-border/20">
         <div className="flex items-center justify-around py-2">
-          <Button variant="ghost" size="sm" className="flex flex-col items-center p-2">
-            <Home className="h-5 w-5 text-ivorian-orange" />
-            <span className="text-xs text-ivorian-orange mt-1">Accueil</span>
-          </Button>
-          <Button variant="ghost" size="sm" className="flex flex-col items-center p-2">
-            <Search className="h-5 w-5 text-gray-500" />
-            <span className="text-xs text-gray-500 mt-1">Recherche</span>
-          </Button>
-          <Button variant="ghost" size="sm" className="flex flex-col items-center p-2">
-            <Heart className="h-5 w-5 text-gray-500" />
-            <span className="text-xs text-gray-500 mt-1">Favoris</span>
-          </Button>
-          <Button variant="ghost" size="sm" className="flex flex-col items-center p-2">
-            <User className="h-5 w-5 text-gray-500" />
-            <span className="text-xs text-gray-500 mt-1">Profil</span>
-          </Button>
+          {menuItems.slice(0, 4).map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <Button
+                key={item.href}
+                variant="ghost"
+                size="sm"
+                className="flex-col h-12 px-2 motion-blur"
+              >
+                <IconComponent className="w-4 h-4 mb-1" />
+                <span className="text-xs">{getLabel(item)}</span>
+              </Button>
+            );
+          })}
         </div>
       </div>
     </>

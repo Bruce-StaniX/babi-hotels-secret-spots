@@ -3,78 +3,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hotro de Babi - Ivorian themed design system */
+/* Hotro de Babi - Ivorian themed design system with Material 3 Dark */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 18 18 18; /* Soft black */
+    --foreground: 250 250 250; /* Cream white */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 24 24 27;
+    --card-foreground: 250 250 250;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 24 24 27;
+    --popover-foreground: 250 250 250;
 
-    --primary: 16 84% 60%; /* Ivorian Orange */
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 93% 65%; /* Warm yellow/gold */
+    --primary-foreground: 18 18 18;
 
-    --secondary: 138 43% 46%; /* Ivorian Green */
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 16 84% 60%; /* Ivorian Orange */
+    --secondary-foreground: 250 250 250;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 39 39 42;
+    --muted-foreground: 161 161 170;
 
-    --accent: 45 93% 47%; /* Golden accent */
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 93% 65%;
+    --accent-foreground: 18 18 18;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 250 250 250;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 16 84% 60%;
+    --border: 39 39 42;
+    --input: 39 39 42;
+    --ring: 45 93% 65%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 16 84% 60%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 16 84% 60%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 16 84% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 138 43% 46%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 45 93% 47%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 16 84% 60%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 16 84% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 16 84% 60%;
+    --sidebar-background: 24 24 27;
+    --sidebar-foreground: 250 250 250;
+    --sidebar-primary: 45 93% 65%;
+    --sidebar-primary-foreground: 18 18 18;
+    --sidebar-accent: 39 39 42;
+    --sidebar-accent-foreground: 250 250 250;
+    --sidebar-border: 39 39 42;
+    --sidebar-ring: 45 93% 65%;
   }
 }
 
@@ -85,7 +55,20 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    background: linear-gradient(135deg, hsl(18 18 18) 0%, hsl(24 24 27) 100%);
+    min-height: 100vh;
   }
+}
+
+/* Material 3 inspired color palette */
+.theme-material {
+  --surface-dim: hsl(24 24 27);
+  --surface-bright: hsl(39 39 42);
+  --surface-container: hsl(32 32 35);
+  --surface-container-high: hsl(35 35 38);
+  --on-surface-variant: hsl(161 161 170);
+  --outline: hsl(115 115 127);
+  --outline-variant: hsl(68 68 75);
 }
 
 /* Custom gradients for Ivorian theme */
@@ -93,23 +76,35 @@
   background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
 }
 
-.gradient-green {
-  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-}
-
 .gradient-gold {
   background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
 }
 
-/* Animation classes */
+.gradient-discrete {
+  background: linear-gradient(135deg, hsl(24 24 27) 0%, hsl(18 18 18) 50%, hsl(32 32 35) 100%);
+}
+
+/* Enhanced Animation classes */
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out;
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -117,15 +112,67 @@
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
+    filter: blur(4px);
   }
   to {
     opacity: 1;
+    filter: blur(0);
   }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Privacy mode styles */
+.privacy-mode {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+
+.privacy-mode:hover {
+  filter: blur(0px);
+}
+
+/* Discrete mode indicators */
+.discrete-indicator {
+  background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 53, 0.1));
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Motion blur effect for smooth transitions */
+.motion-blur {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.motion-blur:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Glass morphism effect */
+.glass-morphism {
+  background: rgba(24, 24, 27, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
