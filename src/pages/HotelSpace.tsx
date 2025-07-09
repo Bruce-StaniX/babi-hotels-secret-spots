@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,13 +20,31 @@ import {
   BarChart3,
   MessageSquare,
   Eye,
-  Settings
+  Settings,
+  ArrowLeft
 } from 'lucide-react';
 import { useAppMode } from '@/hooks/useAppMode';
+import { AddHotelDialog } from '@/components/AddHotelDialog';
+import { ViewHotelDialog } from '@/components/ViewHotelDialog';
+import { EditHotelDialog } from '@/components/EditHotelDialog';
+import { ContactDialog } from '@/components/ContactDialog';
+import { ReplyDialog } from '@/components/ReplyDialog';
 
 const HotelSpace = () => {
   const { language } = useAppMode();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('hotels');
+  
+  // Dialog states
+  const [addHotelOpen, setAddHotelOpen] = useState(false);
+  const [viewHotelOpen, setViewHotelOpen] = useState(false);
+  const [editHotelOpen, setEditHotelOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [replyOpen, setReplyOpen] = useState(false);
+  
+  // Selected items
+  const [selectedHotel, setSelectedHotel] = useState<typeof hotels[0] | null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<typeof reservations[0] | null>(null);
 
   // Données fictives pour la démonstration
   const hotels = [
@@ -105,18 +124,29 @@ const HotelSpace = () => {
       <div className="container mx-auto px-4 py-8 pb-20 md:pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <Hotel className="w-8 h-8 text-primary" />
-              {language === 'en' ? 'Hotel Management Space' : 'Espace Hôtelier'}
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              {language === 'en' 
-                ? 'Manage your hotels, reservations and analytics' 
-                : 'Gérez vos hôtels, réservations et analyses'}
-            </p>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {language === 'en' ? 'Back' : 'Retour'}
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Hotel className="w-8 h-8 text-primary" />
+                {language === 'en' ? 'Hotel Management Space' : 'Espace Hôtelier'}
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                {language === 'en' 
+                  ? 'Manage your hotels, reservations and analytics' 
+                  : 'Gérez vos hôtels, réservations et analyses'}
+              </p>
+            </div>
           </div>
-          <Button className="gradient-ivorian">
+          <Button className="gradient-ivorian" onClick={() => setAddHotelOpen(true)}>
             <Plus className="w-4 h-4 mr-2" />
             {language === 'en' ? 'Add Hotel' : 'Ajouter un Hôtel'}
           </Button>
@@ -245,11 +275,25 @@ const HotelSpace = () => {
                       </div>
 
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedHotel(hotel);
+                            setViewHotelOpen(true);
+                          }}
+                        >
                           <Eye className="w-4 h-4 mr-2" />
                           {language === 'en' ? 'View' : 'Voir'}
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedHotel(hotel);
+                            setEditHotelOpen(true);
+                          }}
+                        >
                           <Edit className="w-4 h-4 mr-2" />
                           {language === 'en' ? 'Edit' : 'Modifier'}
                         </Button>
@@ -286,11 +330,25 @@ const HotelSpace = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-semibold">{reservation.amount}</p>
-                        <div className="flex gap-2 mt-2">
-                          <Button variant="outline" size="sm">
+                         <div className="flex gap-2 mt-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedReservation(reservation);
+                              // You can add view details functionality here
+                            }}
+                          >
                             {language === 'en' ? 'View Details' : 'Voir Détails'}
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedReservation(reservation);
+                              setContactOpen(true);
+                            }}
+                          >
                             {language === 'en' ? 'Contact' : 'Contacter'}
                           </Button>
                         </div>
@@ -360,7 +418,11 @@ const HotelSpace = () => {
                           : 'Bonjour, j\'ai une question concernant ma réservation à venir...'}
                       </p>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setReplyOpen(true)}
+                    >
                       {language === 'en' ? 'Reply' : 'Répondre'}
                     </Button>
                   </div>
@@ -370,6 +432,37 @@ const HotelSpace = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Dialogs */}
+      <AddHotelDialog open={addHotelOpen} onOpenChange={setAddHotelOpen} />
+      
+      <ViewHotelDialog 
+        open={viewHotelOpen} 
+        onOpenChange={setViewHotelOpen} 
+        hotel={selectedHotel} 
+      />
+      
+      <EditHotelDialog 
+        open={editHotelOpen} 
+        onOpenChange={setEditHotelOpen} 
+        hotel={selectedHotel} 
+      />
+      
+      <ContactDialog 
+        open={contactOpen} 
+        onOpenChange={setContactOpen} 
+        guestName={selectedReservation?.guestName || ''} 
+        reservationId={selectedReservation?.id} 
+      />
+      
+      <ReplyDialog 
+        open={replyOpen} 
+        onOpenChange={setReplyOpen} 
+        originalMessage={language === 'en' 
+          ? 'Hello, I have a question about my upcoming reservation...' 
+          : 'Bonjour, j\'ai une question concernant ma réservation à venir...'} 
+        senderName="Marie Kouassi" 
+      />
     </div>
   );
 };
