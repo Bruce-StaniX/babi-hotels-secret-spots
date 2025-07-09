@@ -7,6 +7,9 @@ import { useAppMode } from '@/hooks/useAppMode';
 import { supabase } from '@/integrations/supabase/client';
 import { Plus, Hotel, Users, TrendingUp, Edit, Trash2, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import AddHotelDialog from '@/components/admin/AddHotelDialog';
+import EditHotelDialog from '@/components/admin/EditHotelDialog';
+import ViewHotelDialog from '@/components/admin/ViewHotelDialog';
 import { Tables } from '@/integrations/supabase/types';
 
 type Hotel = Tables<'hotels'>;
@@ -144,10 +147,12 @@ const AdminHotels = () => {
         <h2 className="text-xl font-semibold">
           {language === 'en' ? 'Hotel Management' : 'Gestion des Hôtels'}
         </h2>
-        <Button className="gradient-ivorian">
-          <Plus className="w-4 h-4 mr-2" />
-          {language === 'en' ? 'Add Hotel' : 'Ajouter Hôtel'}
-        </Button>
+        <AddHotelDialog onHotelAdded={fetchHotels}>
+          <Button className="gradient-ivorian">
+            <Plus className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'Add Hotel' : 'Ajouter Hôtel'}
+          </Button>
+        </AddHotelDialog>
       </div>
 
       {/* Stats Cards */}
@@ -249,14 +254,18 @@ const AdminHotels = () => {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <Eye className="w-4 h-4 mr-1" />
-                      {language === 'en' ? 'View' : 'Voir'}
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Edit className="w-4 h-4 mr-1" />
-                      {language === 'en' ? 'Edit' : 'Modifier'}
-                    </Button>
+                    <ViewHotelDialog hotel={hotel}>
+                      <Button variant="outline" size="sm">
+                        <Eye className="w-4 h-4 mr-1" />
+                        {language === 'en' ? 'View' : 'Voir'}
+                      </Button>
+                    </ViewHotelDialog>
+                    <EditHotelDialog hotel={hotel} onHotelUpdated={fetchHotels}>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4 mr-1" />
+                        {language === 'en' ? 'Edit' : 'Modifier'}
+                      </Button>
+                    </EditHotelDialog>
                     {hotel.status === 'pending' && (
                       <>
                         <Button 

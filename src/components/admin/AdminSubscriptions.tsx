@@ -7,6 +7,7 @@ import { useAppMode } from '@/hooks/useAppMode';
 import { supabase } from '@/integrations/supabase/client';
 import { Crown, Users, TrendingUp, DollarSign, Calendar, Mail, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ContactUserDialog from '@/components/admin/ContactUserDialog';
 import { Tables } from '@/integrations/supabase/types';
 
 type Subscription = Tables<'subscriptions'>;
@@ -300,10 +301,16 @@ const AdminSubscriptions = () => {
                         {language === 'en' ? 'Renew' : 'Renouveler'}
                       </Button>
                     )}
-                    <Button variant="outline" size="sm">
-                      <Mail className="w-4 h-4 mr-1" />
-                      {language === 'en' ? 'Contact' : 'Contacter'}
-                    </Button>
+                    <ContactUserDialog 
+                      userId={subscription.user_id || ''} 
+                      context="subscription" 
+                      contextId={subscription.id}
+                    >
+                      <Button variant="outline" size="sm">
+                        <Mail className="w-4 h-4 mr-1" />
+                        {language === 'en' ? 'Contact' : 'Contacter'}
+                      </Button>
+                    </ContactUserDialog>
                   </div>
                 </div>
               </CardContent>
