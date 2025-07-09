@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut, Users, Eye, EyeOff } from 'lucide-react';
+import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut, Users, Eye, EyeOff, Crown, Gift, Zap, Clock } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import ModeSelector from '@/components/ModeSelector';
 import { useAppMode } from '@/hooks/useAppMode';
@@ -13,6 +13,7 @@ import { useAppMode } from '@/hooks/useAppMode';
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModeDialogOpen, setIsModeDialogOpen] = useState(false);
+  const [isVipDialogOpen, setIsVipDialogOpen] = useState(false);
   const { mode, setMode } = useAppMode();
   const [profile, setProfile] = useState({
     name: "Jean Kouassi",
@@ -50,6 +51,40 @@ const Profile = () => {
 
   const currentModeInfo = getModeInfo();
   const ModeIcon = currentModeInfo.icon;
+
+  // Avantages VIP
+  const vipBenefits = [
+    {
+      icon: Crown,
+      title: "Accès prioritaire",
+      description: "Réservations prioritaires et support dédié 24h/24"
+    },
+    {
+      icon: Gift,
+      title: "Réductions exclusives",
+      description: "Jusqu'à 20% de réduction sur tous les hébergements"
+    },
+    {
+      icon: Zap,
+      title: "Confirmation instantanée",
+      description: "Vos réservations sont confirmées en temps réel"
+    },
+    {
+      icon: Heart,
+      title: "Favoris illimités",
+      description: "Sauvegardez autant d'hébergements que vous voulez"
+    },
+    {
+      icon: Clock,
+      title: "Annulation flexible",
+      description: "Annulation gratuite jusqu'à 2h avant l'arrivée"
+    },
+    {
+      icon: Star,
+      title: "Expériences VIP",
+      description: "Accès à des hébergements exclusifs et services premium"
+    }
+  ];
 
   const stats = [
     { label: "Réservations", value: "12", icon: MapPin },
@@ -293,9 +328,77 @@ const Profile = () => {
                 <p className="text-sm text-muted-foreground mb-3">
                   Profitez d'avantages exclusifs
                 </p>
-                <Button size="sm" className="w-full">
-                  Voir les avantages
-                </Button>
+                <Dialog open={isVipDialogOpen} onOpenChange={setIsVipDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="w-full">
+                      Voir les avantages
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-2xl glass-morphism">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center text-xl">
+                        <Crown className="w-6 h-6 text-primary mr-2" />
+                        Avantages Membre VIP
+                      </DialogTitle>
+                    </DialogHeader>
+                    
+                    <div className="py-6">
+                      {/* En-tête VIP */}
+                      <div className="text-center mb-8 p-6 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10">
+                        <Crown className="w-12 h-12 text-primary mx-auto mb-3" />
+                        <h3 className="text-2xl font-bold text-foreground mb-2">Statut VIP Actif</h3>
+                        <p className="text-muted-foreground">Profitez de tous les privilèges exclusifs</p>
+                      </div>
+
+                      {/* Grille des avantages */}
+                      <div className="grid md:grid-cols-2 gap-4 mb-6">
+                        {vipBenefits.map((benefit, index) => {
+                          const BenefitIcon = benefit.icon;
+                          return (
+                            <div key={index} className="p-4 rounded-lg border border-border/50 hover:border-primary/30 transition-colors">
+                              <div className="flex items-start space-x-3">
+                                <div className="p-2 rounded-lg bg-primary/10">
+                                  <BenefitIcon className="w-5 h-5 text-primary" />
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-foreground mb-1">{benefit.title}</h4>
+                                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Statistiques VIP */}
+                      <div className="grid grid-cols-3 gap-4 mb-6 p-4 rounded-lg bg-muted/20">
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-primary">156</p>
+                          <p className="text-xs text-muted-foreground">FCFA économisés</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-primary">12</p>
+                          <p className="text-xs text-muted-foreground">Réservations VIP</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-primary">98%</p>
+                          <p className="text-xs text-muted-foreground">Satisfaction</p>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-3">
+                        <Button className="flex-1" onClick={() => setIsVipDialogOpen(false)}>
+                          <Gift className="w-4 h-4 mr-2" />
+                          Utiliser une réduction
+                        </Button>
+                        <Button variant="outline" className="flex-1" onClick={() => setIsVipDialogOpen(false)}>
+                          Partager le statut
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </div>
