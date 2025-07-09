@@ -128,7 +128,10 @@ const HotelSpace = () => {
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                console.log('Back button clicked');
+                navigate(-1);
+              }}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
