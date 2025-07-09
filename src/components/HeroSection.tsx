@@ -1,9 +1,32 @@
 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Calendar, Users, Search } from "lucide-react";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const [searchData, setSearchData] = useState({
+    location: "",
+    checkIn: "",
+    checkOut: "",
+    guests: "2"
+  });
+
+  const handleSearch = () => {
+    // Construire les paramètres de recherche
+    const searchParams = new URLSearchParams();
+    if (searchData.location) searchParams.set('location', searchData.location);
+    if (searchData.checkIn) searchParams.set('checkin', searchData.checkIn);
+    if (searchData.checkOut) searchParams.set('checkout', searchData.checkOut);
+    if (searchData.guests) searchParams.set('guests', searchData.guests);
+    
+    // Naviguer vers la page de recherche avec les paramètres
+    navigate(`/search?${searchParams.toString()}`);
+  };
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-ivorian-orange via-ivorian-orange-light to-ivorian-gold overflow-hidden">
       {/* Background Pattern */}
@@ -37,42 +60,70 @@ const HeroSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               {/* Location */}
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  placeholder="Abidjan, Yamoussoukro..."
-                  className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
-                />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+                <Select value={searchData.location} onValueChange={(value) => setSearchData({...searchData, location: value})}>
+                  <SelectTrigger className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange">
+                    <SelectValue placeholder="Abidjan, Yamoussoukro..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abidjan">Abidjan</SelectItem>
+                    <SelectItem value="yamoussoukro">Yamoussoukro</SelectItem>
+                    <SelectItem value="bouake">Bouaké</SelectItem>
+                    <SelectItem value="daloa">Daloa</SelectItem>
+                    <SelectItem value="san-pedro">San-Pédro</SelectItem>
+                    <SelectItem value="korhogo">Korhogo</SelectItem>
+                    <SelectItem value="man">Man</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Check-in */}
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
                 <Input
                   type="date"
+                  value={searchData.checkIn}
+                  onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})}
                   className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
+                  min={new Date().toISOString().split('T')[0]}
                 />
               </div>
 
               {/* Check-out */}
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
                 <Input
                   type="date"
+                  value={searchData.checkOut}
+                  onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})}
                   className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
+                  min={searchData.checkIn || new Date().toISOString().split('T')[0]}
                 />
               </div>
 
               {/* Guests */}
               <div className="relative">
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  placeholder="2 personnes"
-                  className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
-                />
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+                <Select value={searchData.guests} onValueChange={(value) => setSearchData({...searchData, guests: value})}>
+                  <SelectTrigger className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange">
+                    <SelectValue placeholder="2 personnes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 personne</SelectItem>
+                    <SelectItem value="2">2 personnes</SelectItem>
+                    <SelectItem value="3">3 personnes</SelectItem>
+                    <SelectItem value="4">4 personnes</SelectItem>
+                    <SelectItem value="5">5 personnes</SelectItem>
+                    <SelectItem value="6+">6+ personnes</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <Button className="w-full h-16 text-xl font-semibold gradient-ivorian hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02]">
+            <Button 
+              onClick={handleSearch}
+              className="w-full h-16 text-xl font-semibold gradient-ivorian hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02]"
+            >
               <Search className="mr-3 h-6 w-6" />
               Rechercher des hébergements
             </Button>
