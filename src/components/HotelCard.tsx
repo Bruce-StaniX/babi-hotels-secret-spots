@@ -1,24 +1,17 @@
 
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Wifi, Car, Coffee, Shield } from "lucide-react";
-
+import { ViewHotelDialog } from "@/components/ViewHotelDialog";
+import type { Hotel } from "@/data/hotelsData";
 interface HotelCardProps {
-  hotel: {
-    id: string;
-    name: string;
-    location: string;
-    rating: number;
-    price: number;
-    image: string;
-    amenities: string[];
-    isDiscrete: boolean;
-    reviews: number;
-  };
+  hotel: Hotel;
 }
 
 const HotelCard = ({ hotel }: HotelCardProps) => {
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const amenityIcons = {
     'WiFi': Wifi,
     'Parking': Car,
@@ -81,10 +74,19 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           })}
         </div>
 
-        <Button className="w-full gradient-ivorian hover:opacity-90 transition-opacity">
+        <Button 
+          className="w-full gradient-ivorian hover:opacity-90 transition-opacity"
+          onClick={() => setViewDialogOpen(true)}
+        >
           Voir les détails
         </Button>
       </CardContent>
+
+      <ViewHotelDialog 
+        open={viewDialogOpen}
+        onOpenChange={setViewDialogOpen}
+        hotel={hotel}
+      />
     </Card>
   );
 };

@@ -9,6 +9,7 @@ import { Search as SearchIcon, MapPin, Star, Filter, ArrowLeft } from 'lucide-re
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { searchHotels, communes, Hotel, getCommuneDisplayName } from '@/data/hotelsData';
+import { ViewHotelDialog } from '@/components/ViewHotelDialog';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const Search = () => {
     rating: 'all'
   });
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
 
   // Effet pour récupérer les paramètres d'URL et effectuer la recherche
   useEffect(() => {
@@ -162,7 +165,15 @@ const Search = () => {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold text-primary">{hotel.price.toLocaleString()} FCFA</span>
-                      <Button size="sm">Voir détails</Button>
+                      <Button 
+                        size="sm"
+                        onClick={() => {
+                          setSelectedHotel(hotel);
+                          setViewDialogOpen(true);
+                        }}
+                      >
+                        Voir détails
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -171,6 +182,12 @@ const Search = () => {
           ))}
         </div>
       </div>
+
+      <ViewHotelDialog 
+        open={viewDialogOpen}
+        onOpenChange={setViewDialogOpen}
+        hotel={selectedHotel}
+      />
     </div>
   );
 };
