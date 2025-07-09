@@ -34,7 +34,7 @@ const Search = () => {
     // Effectuer la recherche avec les paramètres
     const results = searchHotels(searchQuery, locationParam || filters.location);
     setSearchResults(results);
-  }, [searchParams, searchQuery, filters.location]);
+  }, [searchParams, searchQuery]);
 
   const handleLocationChange = (location: string) => {
     const actualLocation = location === "all" ? "" : location;
@@ -86,12 +86,15 @@ const Search = () => {
 
         {/* Location Filter */}
         <div className="mb-6">
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 z-10" />
-            <Select value={filters.location} onValueChange={handleLocationChange}>
-              <SelectTrigger className="pl-10">
-                <SelectValue placeholder="Filtrer par commune..." />
-              </SelectTrigger>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 z-10" />
+              <Select 
+                value={filters.location || "all"} 
+                onValueChange={handleLocationChange}
+              >
+                <SelectTrigger className="pl-10">
+                  <SelectValue placeholder="Filtrer par commune..." />
+                </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Toutes les communes</SelectItem>
                 {communes.map((commune) => (
