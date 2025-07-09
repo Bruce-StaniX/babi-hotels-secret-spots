@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,12 +23,18 @@ import {
   TrendingUp,
   UserCheck,
   Building,
-  MessageSquare
+  MessageSquare,
+  ArrowLeft
 } from 'lucide-react';
 import { useAppMode } from '@/hooks/useAppMode';
+import AdminSystemSettingsDialog from '@/components/AdminSystemSettingsDialog';
+import AdminAddUserDialog from '@/components/AdminAddUserDialog';
+import AdminUserActionDialog from '@/components/AdminUserActionDialog';
+import AdminHotelActionDialog from '@/components/AdminHotelActionDialog';
 
 const Admin = () => {
   const { language } = useAppMode();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   // Données fictives pour la démonstration
@@ -134,26 +141,41 @@ const Admin = () => {
       <div className="container mx-auto px-4 py-8 pb-20 md:pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <Shield className="w-8 h-8 text-primary" />
-              {language === 'en' ? 'Admin Dashboard' : 'Tableau de Bord Admin'}
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              {language === 'en' 
-                ? 'System administration and user management' 
-                : 'Administration système et gestion des utilisateurs'}
-            </p>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {language === 'en' ? 'Back to Home' : 'Retour Accueil'}
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Shield className="w-8 h-8 text-primary" />
+                {language === 'en' ? 'Admin Dashboard' : 'Tableau de Bord Admin'}
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                {language === 'en' 
+                  ? 'System administration and user management' 
+                  : 'Administration système et gestion des utilisateurs'}
+              </p>
+            </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline">
-              <Settings className="w-4 h-4 mr-2" />
-              {language === 'en' ? 'System Settings' : 'Paramètres Système'}
-            </Button>
-            <Button className="gradient-ivorian">
-              <Plus className="w-4 h-4 mr-2" />
-              {language === 'en' ? 'Add User' : 'Ajouter Utilisateur'}
-            </Button>
+            <AdminSystemSettingsDialog>
+              <Button variant="outline">
+                <Settings className="w-4 h-4 mr-2" />
+                {language === 'en' ? 'System Settings' : 'Paramètres Système'}
+              </Button>
+            </AdminSystemSettingsDialog>
+            <AdminAddUserDialog>
+              <Button className="gradient-ivorian">
+                <Plus className="w-4 h-4 mr-2" />
+                {language === 'en' ? 'Add User' : 'Ajouter Utilisateur'}
+              </Button>
+            </AdminAddUserDialog>
           </div>
         </div>
 
@@ -387,17 +409,23 @@ const Admin = () => {
                           {language === 'en' ? 'Last login:' : 'Dernière connexion:'} {user.lastLogin}
                         </p>
                         <div className="flex gap-2 mt-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="w-4 h-4 mr-2" />
-                            {language === 'en' ? 'View' : 'Voir'}
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Edit className="w-4 h-4 mr-2" />
-                            {language === 'en' ? 'Edit' : 'Modifier'}
-                          </Button>
-                          <Button variant="outline" size="sm" className="text-destructive border-destructive">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          <AdminUserActionDialog user={user} action="view">
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-2" />
+                              {language === 'en' ? 'View' : 'Voir'}
+                            </Button>
+                          </AdminUserActionDialog>
+                          <AdminUserActionDialog user={user} action="edit">
+                            <Button variant="outline" size="sm">
+                              <Edit className="w-4 h-4 mr-2" />
+                              {language === 'en' ? 'Edit' : 'Modifier'}
+                            </Button>
+                          </AdminUserActionDialog>
+                          <AdminUserActionDialog user={user} action="delete">
+                            <Button variant="outline" size="sm" className="text-destructive border-destructive">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AdminUserActionDialog>
                         </div>
                       </div>
                     </div>
@@ -440,17 +468,23 @@ const Admin = () => {
                           {request.documents} {language === 'en' ? 'documents' : 'documents'}
                         </p>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            {language === 'en' ? 'View Details' : 'Voir Détails'}
-                          </Button>
+                          <AdminHotelActionDialog request={request} action="view">
+                            <Button variant="outline" size="sm">
+                              {language === 'en' ? 'View Details' : 'Voir Détails'}
+                            </Button>
+                          </AdminHotelActionDialog>
                           {request.status === 'pending' && (
                             <>
-                              <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                                {language === 'en' ? 'Approve' : 'Approuver'}
-                              </Button>
-                              <Button variant="outline" size="sm" className="text-destructive border-destructive">
-                                {language === 'en' ? 'Reject' : 'Rejeter'}
-                              </Button>
+                              <AdminHotelActionDialog request={request} action="approve">
+                                <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                                  {language === 'en' ? 'Approve' : 'Approuver'}
+                                </Button>
+                              </AdminHotelActionDialog>
+                              <AdminHotelActionDialog request={request} action="reject">
+                                <Button variant="outline" size="sm" className="text-destructive border-destructive">
+                                  {language === 'en' ? 'Reject' : 'Rejeter'}
+                                </Button>
+                              </AdminHotelActionDialog>
                             </>
                           )}
                         </div>
