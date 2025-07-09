@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import LanguageSwitch from './LanguageSwitch';
 import ModeSelector from './ModeSelector';
 import { useAppMode } from '@/hooks/useAppMode';
@@ -13,11 +14,11 @@ const Navigation = () => {
   const { mode, language, setMode, setLanguage, isPrivacyModeActive } = useAppMode();
 
   const menuItems = [
-    { icon: Search, label: 'Recherche', labelNouchi: 'Chercher', href: '#' },
-    { icon: Heart, label: 'Favoris', labelNouchi: 'Mes favoris', href: '#' },
-    { icon: MessageCircle, label: 'Messages', labelNouchi: 'Messages', href: '#' },
-    { icon: MapPin, label: 'Carte', labelNouchi: 'Map', href: '#' },
-    { icon: User, label: 'Profil', labelNouchi: 'Mon profil', href: '#' },
+    { icon: Search, label: 'Recherche', labelNouchi: 'Chercher', href: '/search' },
+    { icon: Heart, label: 'Favoris', labelNouchi: 'Mes favoris', href: '/favorites' },
+    { icon: MessageCircle, label: 'Messages', labelNouchi: 'Messages', href: '/messages' },
+    { icon: MapPin, label: 'Carte', labelNouchi: 'Map', href: '/map' },
+    { icon: User, label: 'Profil', labelNouchi: 'Mon profil', href: '/profile' },
   ];
 
   const getLabel = (item: any) => language === 'nouchi' ? item.labelNouchi : item.label;
@@ -76,10 +77,12 @@ const Navigation = () => {
                               key={item.href}
                               variant="ghost"
                               className="w-full justify-start motion-blur"
-                              onClick={() => setIsMenuOpen(false)}
+                              asChild
                             >
-                              <IconComponent className="w-4 h-4 mr-3" />
-                              {getLabel(item)}
+                              <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
+                                <IconComponent className="w-4 h-4 mr-3" />
+                                {getLabel(item)}
+                              </Link>
                             </Button>
                           );
                         })}
@@ -119,9 +122,12 @@ const Navigation = () => {
                 variant="ghost"
                 size="sm"
                 className="flex-col h-12 px-2 motion-blur"
+                asChild
               >
-                <IconComponent className="w-4 h-4 mb-1" />
-                <span className="text-xs">{getLabel(item)}</span>
+                <Link to={item.href}>
+                  <IconComponent className="w-4 h-4 mb-1" />
+                  <span className="text-xs">{getLabel(item)}</span>
+                </Link>
               </Button>
             );
           })}
