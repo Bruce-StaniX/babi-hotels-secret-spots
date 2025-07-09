@@ -37,17 +37,7 @@ export const ViewHotelDialog = ({ open, onOpenChange, hotel }: ViewHotelDialogPr
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <span className="text-2xl font-bold">{hotel.name}</span>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="h-6 w-6"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </DialogTitle>
+          <DialogTitle className="text-2xl font-bold">{hotel.name}</DialogTitle>
           <DialogDescription>
             {language === 'en' ? 'Hotel details and amenities' : 'Détails et équipements de l\'hôtel'}
           </DialogDescription>
