@@ -129,8 +129,8 @@ const HotelSpace = () => {
               variant="outline" 
               size="sm" 
               onClick={() => {
-                console.log('Back button clicked');
-                navigate(-1);
+                console.log('Back button clicked - navigating to home');
+                navigate('/');
               }}
               className="flex items-center gap-2"
             >
