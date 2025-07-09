@@ -124,7 +124,8 @@ const HeroSection = () => {
               className="w-full h-16 text-xl font-semibold gradient-ivorian hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02]"
             >
               <Search className="mr-3 h-6 w-6" />
-              Rechercher des hébergements
+              <span className="hidden sm:inline">Rechercher des hébergements</span>
+              <span className="sm:hidden">Rechercher</span>
             </Button>
           </div>
         </div>
