@@ -50,6 +50,34 @@ const ViewHotelDialog = ({ children, hotel }: ViewHotelDialogProps) => {
         </DialogHeader>
         
         <div className="space-y-6">
+          {/* Photos */}
+          {hotel.images && hotel.images.length > 0 && (
+            <div>
+              <h3 className="font-semibold mb-3">
+                {language === 'en' ? 'Photos' : 'Photos'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {hotel.images.map((imageUrl, index) => (
+                  <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
+                    <img
+                      src={imageUrl}
+                      alt={`${hotel.name} - Photo ${index + 1}`}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop';
+                      }}
+                    />
+                    {index === 0 && (
+                      <div className="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded text-xs">
+                        {language === 'en' ? 'Main' : 'Principal'}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Header with name and status */}
           <div className="flex items-start justify-between">
             <div>

@@ -35,7 +35,8 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
     status: 'approved' as 'approved' | 'pending' | 'active' | 'rejected' | 'suspended',
     admin_notes: '',
     rating: 0,
-    amenities: [] as string[]
+    amenities: [] as string[],
+    images: ''
   });
 
   useEffect(() => {
@@ -51,7 +52,8 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
         status: hotel.status as 'approved' | 'pending' | 'active' | 'rejected' | 'suspended',
         admin_notes: hotel.admin_notes || '',
         rating: hotel.rating || 0,
-        amenities: hotel.amenities || []
+        amenities: hotel.amenities || [],
+        images: hotel.images ? hotel.images.join(', ') : ''
       });
     }
   }, [open, hotel]);
@@ -61,6 +63,12 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
     setLoading(true);
 
     try {
+      // Process images URLs
+      const imageUrls = formData.images
+        .split(',')
+        .map(url => url.trim())
+        .filter(url => url.length > 0);
+
       const updateData: any = {
         name: formData.name,
         description: formData.description,
@@ -72,7 +80,8 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
         status: formData.status,
         admin_notes: formData.admin_notes,
         rating: formData.rating,
-        amenities: formData.amenities
+        amenities: formData.amenities,
+        images: imageUrls.length > 0 ? imageUrls : null
       };
 
       // Add approved_at if status is being changed to approved
@@ -271,6 +280,28 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
                 </SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="images">
+              {language === 'en' ? 'Photos (URLs)' : 'Photos (URLs)'}
+            </Label>
+            <Textarea
+              id="images"
+              value={formData.images}
+              onChange={(e) => setFormData({ ...formData, images: e.target.value })}
+              rows={3}
+              placeholder={language === 'en' 
+                ? 'Enter image URLs separated by commas...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
+                : 'Entrez les URLs des images séparées par des virgules...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
+              }
+            />
+            <p className="text-xs text-muted-foreground">
+              {language === 'en' 
+                ? 'Separate multiple image URLs with commas. First image will be the main photo.'
+                : 'Séparez les URLs des images par des virgules. La première image sera la photo principale.'
+              }
+            </p>
           </div>
 
           <div className="space-y-2">
