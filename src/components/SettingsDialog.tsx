@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -35,6 +35,9 @@ export const SettingsDialog = ({ children }: SettingsDialogProps) => {
             <Settings className="w-5 h-5" />
             {language === 'en' ? 'Settings' : 'Paramètres'}
           </DialogTitle>
+          <DialogDescription>
+            {language === 'en' ? 'Customize your application preferences' : 'Personnalisez vos préférences d\'application'}
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-6">
