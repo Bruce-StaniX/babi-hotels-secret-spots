@@ -10,8 +10,7 @@ const HeroSection = () => {
   const navigate = useNavigate();
   const [searchData, setSearchData] = useState({
     location: "",
-    checkIn: "",
-    checkOut: "",
+    date: "",
     guests: "2"
   });
 
@@ -19,8 +18,7 @@ const HeroSection = () => {
     // Construire les paramètres de recherche
     const searchParams = new URLSearchParams();
     if (searchData.location) searchParams.set('location', searchData.location);
-    if (searchData.checkIn) searchParams.set('checkin', searchData.checkIn);
-    if (searchData.checkOut) searchParams.set('checkout', searchData.checkOut);
+    if (searchData.date) searchParams.set('date', searchData.date);
     if (searchData.guests) searchParams.set('guests', searchData.guests);
     
     // Naviguer vers la page de recherche avec les paramètres
@@ -57,7 +55,7 @@ const HeroSection = () => {
               Trouvez votre hébergement idéal
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Location */}
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
@@ -90,27 +88,15 @@ const HeroSection = () => {
                 </Select>
               </div>
 
-              {/* Check-in */}
+              {/* Date */}
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
                 <Input
                   type="date"
-                  value={searchData.checkIn}
-                  onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})}
+                  value={searchData.date}
+                  onChange={(e) => setSearchData({...searchData, date: e.target.value})}
                   className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
                   min={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-
-              {/* Check-out */}
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
-                <Input
-                  type="date"
-                  value={searchData.checkOut}
-                  onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})}
-                  className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-ivorian-orange"
-                  min={searchData.checkIn || new Date().toISOString().split('T')[0]}
                 />
               </div>
 
