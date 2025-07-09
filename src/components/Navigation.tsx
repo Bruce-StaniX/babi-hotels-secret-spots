@@ -30,8 +30,12 @@ const Navigation = () => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">H</span>
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/7166ae21-46de-4d2d-9098-e5e5e3128fb0.png" 
+                  alt="Hotro de Babi Logo" 
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-foreground">Hotro de Babi</h1>
