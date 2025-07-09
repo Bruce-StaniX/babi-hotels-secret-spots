@@ -4,17 +4,52 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut, Users, Eye, EyeOff } from 'lucide-react';
 import Navigation from '@/components/Navigation';
+import ModeSelector from '@/components/ModeSelector';
+import { useAppMode } from '@/hooks/useAppMode';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isModeDialogOpen, setIsModeDialogOpen] = useState(false);
+  const { mode, setMode } = useAppMode();
   const [profile, setProfile] = useState({
     name: "Jean Kouassi",
     email: "jean.kouassi@email.com",
     phone: "+225 07 12 34 56 78",
     location: "Cocody, Abidjan"
   });
+
+  // Fonction pour obtenir les infos du mode actuel
+  const getModeInfo = () => {
+    switch (mode) {
+      case 'couple':
+        return {
+          icon: Users,
+          label: 'Mode Couple Discret',
+          description: 'Recommandations privées spécialement sélectionnées',
+          color: 'bg-orange-500/10 text-orange-700 border-orange-200'
+        };
+      case 'private':
+        return {
+          icon: EyeOff,
+          label: 'Mode Privé',
+          description: 'Historique effacé + captures d\'écran bloquées',
+          color: 'bg-red-500/10 text-red-700 border-red-200'
+        };
+      default:
+        return {
+          icon: Shield,
+          label: 'Mode Normal',
+          description: 'Navigation standard avec toutes les fonctionnalités',
+          color: 'bg-blue-500/10 text-blue-700 border-blue-200'
+        };
+    }
+  };
+
+  const currentModeInfo = getModeInfo();
+  const ModeIcon = currentModeInfo.icon;
 
   const stats = [
     { label: "Réservations", value: "12", icon: MapPin },
@@ -53,6 +88,47 @@ const Profile = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Profile Info */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Mode de navigation actuel */}
+            <Card className="glass-morphism">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <ModeIcon className="w-5 h-5 mr-2" />
+                  Mode de navigation actuel
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className={`p-4 rounded-lg border ${currentModeInfo.color}`}>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground mb-1">{currentModeInfo.label}</h3>
+                      <p className="text-sm text-muted-foreground">{currentModeInfo.description}</p>
+                    </div>
+                    <Dialog open={isModeDialogOpen} onOpenChange={setIsModeDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          Changer
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md glass-morphism">
+                        <DialogHeader>
+                          <DialogTitle>Choisir votre mode</DialogTitle>
+                        </DialogHeader>
+                        <div className="py-4">
+                          <ModeSelector 
+                            currentMode={mode} 
+                            onModeChange={(newMode) => {
+                              setMode(newMode);
+                              setIsModeDialogOpen(false);
+                            }} 
+                          />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="glass-morphism">
               <CardHeader>
                 <div className="flex justify-between items-center">
