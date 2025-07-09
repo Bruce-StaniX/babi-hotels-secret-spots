@@ -131,7 +131,6 @@ const Navigation = () => {
                           <Button
                             variant="ghost"
                             className="w-full justify-start text-muted-foreground"
-                            onClick={() => setIsMenuOpen(false)}
                           >
                             <Settings className="w-4 h-4 mr-3" />
                             {language === 'en' ? 'Settings' : 'Paramètres'}

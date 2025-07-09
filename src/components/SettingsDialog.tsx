@@ -16,6 +16,8 @@ export const SettingsDialog = ({ children }: SettingsDialogProps) => {
   const { mode, language, setMode, setLanguage, isPrivacyModeActive } = useAppMode();
   const [open, setOpen] = useState(false);
 
+  console.log('SettingsDialog rendered, open:', open);
+
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
   };
