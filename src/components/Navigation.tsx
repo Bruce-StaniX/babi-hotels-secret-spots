@@ -21,6 +21,11 @@ const Navigation = () => {
     { icon: User, label: 'Profil', labelEn: 'Profile', href: '/profile' },
   ];
 
+  const adminMenuItems = [
+    { icon: Settings, label: 'Espace Hôtelier', labelEn: 'Hotel Space', href: '/hotel-space' },
+    { icon: Shield, label: 'Admin', labelEn: 'Admin', href: '/admin' },
+  ];
+
   const getLabel = (item: any) => language === 'en' ? item.labelEn : item.label;
 
   return (
@@ -91,6 +96,30 @@ const Navigation = () => {
 
                     <div className="border-t border-border pt-6">
                       <ModeSelector currentMode={mode} onModeChange={setMode} />
+                    </div>
+
+                    <div className="border-t border-border pt-6">
+                      <h4 className="text-sm font-semibold mb-3 text-muted-foreground">
+                        {language === 'en' ? 'Management' : 'Gestion'}
+                      </h4>
+                      <div className="space-y-2">
+                        {adminMenuItems.map((item) => {
+                          const IconComponent = item.icon;
+                          return (
+                            <Button
+                              key={item.href}
+                              variant="ghost"
+                              className="w-full justify-start motion-blur"
+                              asChild
+                            >
+                              <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
+                                <IconComponent className="w-4 h-4 mr-3" />
+                                {getLabel(item)}
+                              </Link>
+                            </Button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div className="border-t border-border pt-6">
