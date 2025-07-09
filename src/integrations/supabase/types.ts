@@ -14,7 +14,110 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ad_analytics: {
+        Row: {
+          ad_id: string
+          created_at: string
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+          user_location: string | null
+        }
+        Insert: {
+          ad_id: string
+          created_at?: string
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_location?: string | null
+        }
+        Update: {
+          ad_id?: string
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_analytics_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ads: {
+        Row: {
+          ad_type: string
+          advertiser_email: string
+          advertiser_name: string
+          budget_limit: number | null
+          budget_spent: number | null
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          location_filter: string[] | null
+          position: string
+          price_per_click: number | null
+          price_per_impression: number | null
+          start_date: string
+          target_url: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ad_type: string
+          advertiser_email: string
+          advertiser_name: string
+          budget_limit?: number | null
+          budget_spent?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          location_filter?: string[] | null
+          position: string
+          price_per_click?: number | null
+          price_per_impression?: number | null
+          start_date?: string
+          target_url: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ad_type?: string
+          advertiser_email?: string
+          advertiser_name?: string
+          budget_limit?: number | null
+          budget_spent?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          location_filter?: string[] | null
+          position?: string
+          price_per_click?: number | null
+          price_per_impression?: number | null
+          start_date?: string
+          target_url?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
