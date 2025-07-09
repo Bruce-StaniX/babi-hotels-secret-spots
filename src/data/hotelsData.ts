@@ -614,28 +614,40 @@ export const hotelsData: Hotel[] = [
 
 // Fonction pour obtenir les hôtels par commune
 export const getHotelsByLocation = (location: string): Hotel[] => {
-  if (!location) return hotelsData;
-  return hotelsData.filter(hotel => 
-    hotel.location.toLowerCase() === location.toLowerCase()
-  );
+  if (!location || location === "all") return hotelsData;
+  
+  // Normaliser la recherche pour gérer les variations d'écriture
+  const normalizedLocation = location.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+  
+  return hotelsData.filter(hotel => {
+    const normalizedHotelLocation = hotel.location.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+    return normalizedHotelLocation === normalizedLocation;
+  });
 };
 
 // Fonction pour rechercher des hôtels
 export const searchHotels = (query: string, location?: string): Hotel[] => {
   let results = hotelsData;
   
-  if (location) {
+  if (location && location !== "all") {
     results = getHotelsByLocation(location);
   }
   
   if (query) {
-    const searchTerm = query.toLowerCase();
-    results = results.filter(hotel =>
-      hotel.name.toLowerCase().includes(searchTerm) ||
-      hotel.location.toLowerCase().includes(searchTerm) ||
-      hotel.description.toLowerCase().includes(searchTerm) ||
-      hotel.features.some(feature => feature.toLowerCase().includes(searchTerm))
-    );
+    const searchTerm = query.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+    results = results.filter(hotel => {
+      const normalizedName = hotel.name.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+      const normalizedLocation = hotel.location.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+      const normalizedDescription = hotel.description.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+      
+      return normalizedName.includes(searchTerm) ||
+        normalizedLocation.includes(searchTerm) ||
+        normalizedDescription.includes(searchTerm) ||
+        hotel.features.some(feature => {
+          const normalizedFeature = feature.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e');
+          return normalizedFeature.includes(searchTerm);
+        });
+    });
   }
   
   return results;
