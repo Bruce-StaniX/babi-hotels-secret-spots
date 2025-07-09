@@ -118,6 +118,193 @@ export type Database = {
         }
         Relationships: []
       }
+      hotel_analytics: {
+        Row: {
+          bookings: number | null
+          created_at: string
+          date: string
+          hotel_id: string | null
+          id: string
+          revenue: number | null
+          views: number | null
+        }
+        Insert: {
+          bookings?: number | null
+          created_at?: string
+          date?: string
+          hotel_id?: string | null
+          id?: string
+          revenue?: number | null
+          views?: number | null
+        }
+        Update: {
+          bookings?: number | null
+          created_at?: string
+          date?: string
+          hotel_id?: string | null
+          id?: string
+          revenue?: number | null
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotel_analytics_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotels: {
+        Row: {
+          address: string | null
+          admin_notes: string | null
+          amenities: string[] | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          images: string[] | null
+          location: string
+          name: string
+          owner_id: string | null
+          phone: string | null
+          pricing: Json | null
+          rating: number | null
+          review_count: number | null
+          room_types: Json | null
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          admin_notes?: string | null
+          amenities?: string[] | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          images?: string[] | null
+          location: string
+          name: string
+          owner_id?: string | null
+          phone?: string | null
+          pricing?: Json | null
+          rating?: number | null
+          review_count?: number | null
+          room_types?: Json | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          admin_notes?: string | null
+          amenities?: string[] | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          images?: string[] | null
+          location?: string
+          name?: string
+          owner_id?: string | null
+          phone?: string | null
+          pricing?: Json | null
+          rating?: number | null
+          review_count?: number | null
+          room_types?: Json | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      subscription_notifications: {
+        Row: {
+          created_at: string
+          email_sent: boolean | null
+          id: string
+          sent_at: string | null
+          subscription_id: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          sent_at?: string | null
+          subscription_id?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          sent_at?: string | null
+          subscription_id?: string | null
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_notifications_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          auto_renew: boolean | null
+          created_at: string
+          end_date: string | null
+          id: string
+          plan_type: string
+          start_date: string
+          status: string
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          auto_renew?: boolean | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          plan_type: string
+          start_date?: string
+          status?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          auto_renew?: boolean | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          plan_type?: string
+          start_date?: string
+          status?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

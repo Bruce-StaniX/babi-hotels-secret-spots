@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, AlertTriangle, Plus, Settings, ArrowLeft, BarChart3, Users, Hotel, FileText, Cog } from 'lucide-react';
+import { Shield, AlertTriangle, Plus, Settings, ArrowLeft, BarChart3, Users, Hotel, FileText, Cog, Crown } from 'lucide-react';
 import { useAppMode } from '@/hooks/useAppMode';
 import { useIsMobile } from '@/hooks/use-mobile';
 import AdminSystemSettingsDialog from '@/components/AdminSystemSettingsDialog';
@@ -12,6 +12,7 @@ import AdminAddUserDialog from '@/components/AdminAddUserDialog';
 import AdminDashboard from '@/components/admin/AdminDashboard';
 import AdminUsers from '@/components/admin/AdminUsers';
 import AdminHotels from '@/components/admin/AdminHotels';
+import AdminSubscriptions from '@/components/admin/AdminSubscriptions';
 import AdminReports from '@/components/admin/AdminReports';
 import AdminSettings from '@/components/admin/AdminSettings';
 import AdminStatsCards from '@/components/admin/AdminStatsCards';
@@ -97,7 +98,7 @@ const Admin = () => {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-1">
               <BarChart3 className="w-4 h-4" />
               {isMobile 
@@ -117,6 +118,13 @@ const Admin = () => {
               {isMobile 
                 ? (language === 'en' ? 'Hotels' : 'Hôtels')
                 : (language === 'en' ? 'Hotels' : 'Hôtels')
+              }
+            </TabsTrigger>
+            <TabsTrigger value="subscriptions" className="flex items-center gap-1">
+              <Crown className="w-4 h-4" />
+              {isMobile 
+                ? (language === 'en' ? 'Subs' : 'Abos')
+                : (language === 'en' ? 'Subscriptions' : 'Abonnements')
               }
             </TabsTrigger>
             <TabsTrigger value="reports" className="flex items-center gap-1">
@@ -148,6 +156,11 @@ const Admin = () => {
           {/* Hotels Tab */}
           <TabsContent value="hotels" className="space-y-6">
             <AdminHotels />
+          </TabsContent>
+
+          {/* Subscriptions Tab */}
+          <TabsContent value="subscriptions" className="space-y-6">
+            <AdminSubscriptions />
           </TabsContent>
 
           {/* Reports Tab */}
