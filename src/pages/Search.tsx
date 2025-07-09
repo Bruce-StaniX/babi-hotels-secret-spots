@@ -62,14 +62,7 @@ const Search = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => {
-                console.log('Bouton retour cliqué', { historyLength: window.history.length });
-                if (window.history.length > 1) {
-                  navigate(-1);
-                } else {
-                  navigate('/');
-                }
-              }}
+              onClick={() => navigate('/')}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />
