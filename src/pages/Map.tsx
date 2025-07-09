@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Navigation as NavigationIcon, Filter, Star, Heart } from 'lucide-react';
+import { MapPin, Navigation as NavigationIcon, Filter, Star, Heart, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 
 const Map = () => {
+  const navigate = useNavigate();
   const [selectedHotel, setSelectedHotel] = useState<number | null>(null);
 
   const hotels = [
@@ -47,8 +49,20 @@ const Map = () => {
       
       <div className="container mx-auto px-4 py-6 pb-20 md:pb-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Carte</h1>
-          <p className="text-muted-foreground">Explorez les hébergements autour de vous</p>
+          <div className="flex items-center mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="mr-3"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Carte</h1>
+              <p className="text-muted-foreground">Explorez les hébergements autour de vous</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-4 h-[600px]">

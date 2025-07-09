@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageCircle, Send, Phone, Video, MoreHorizontal } from 'lucide-react';
+import { MessageCircle, Send, Phone, Video, MoreHorizontal, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 
 const Messages = () => {
+  const navigate = useNavigate();
   const [activeChat, setActiveChat] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -155,8 +157,20 @@ const Messages = () => {
       
       <div className="container mx-auto px-4 py-6 pb-20 md:pb-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Messages</h1>
-          <p className="text-muted-foreground">Communiquez avec vos hôtes</p>
+          <div className="flex items-center mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="mr-3"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Messages</h1>
+              <p className="text-muted-foreground">Communiquez avec vos hôtes</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 h-[600px]">

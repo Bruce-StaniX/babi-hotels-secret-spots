@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut, Users, Eye, EyeOff, Crown, Gift, Zap, Clock } from 'lucide-react';
+import { User, Edit, Heart, MessageCircle, MapPin, Star, Settings, Shield, LogOut, Users, Eye, EyeOff, Crown, Gift, Zap, Clock, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import ModeSelector from '@/components/ModeSelector';
 import { useAppMode } from '@/hooks/useAppMode';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isModeDialogOpen, setIsModeDialogOpen] = useState(false);
   const [isVipDialogOpen, setIsVipDialogOpen] = useState(false);
@@ -116,8 +118,20 @@ const Profile = () => {
       
       <div className="container mx-auto px-4 py-6 pb-20 md:pb-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Mon Profil</h1>
-          <p className="text-muted-foreground">Gérez votre compte et vos préférences</p>
+          <div className="flex items-center mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="mr-3"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Mon Profil</h1>
+              <p className="text-muted-foreground">Gérez votre compte et vos préférences</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">

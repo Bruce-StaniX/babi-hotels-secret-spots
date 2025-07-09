@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search as SearchIcon, MapPin, Star, Filter } from 'lucide-react';
+import { Search as SearchIcon, MapPin, Star, Filter, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 
 const Search = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
@@ -41,8 +43,20 @@ const Search = () => {
       
       <div className="container mx-auto px-4 py-6 pb-20 md:pb-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Recherche</h1>
-          <p className="text-muted-foreground">Trouvez l'hébergement parfait</p>
+          <div className="flex items-center mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="mr-3"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Recherche</h1>
+              <p className="text-muted-foreground">Trouvez l'hébergement parfait</p>
+            </div>
+          </div>
         </div>
 
         {/* Search Bar */}
