@@ -47,7 +47,7 @@ const Search = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />
