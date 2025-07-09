@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -70,69 +71,71 @@ const Navigation = () => {
                     )}
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-80 glass-morphism">
-                  <div className="space-y-6 mt-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">{language === 'en' ? 'Menu' : 'Menu'}</h3>
-                      <div className="space-y-2">
-                        {menuItems.map((item) => {
-                          const IconComponent = item.icon;
-                          return (
-                            <Button
-                              key={item.href}
-                              variant="ghost"
-                              className="w-full justify-start motion-blur"
-                              asChild
-                            >
-                              <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
-                                <IconComponent className="w-4 h-4 mr-3" />
-                                {getLabel(item)}
-                              </Link>
-                            </Button>
-                          );
-                        })}
+                <SheetContent side="right" className="w-80 glass-morphism p-0">
+                  <ScrollArea className="h-full">
+                    <div className="space-y-6 p-6">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-4">{language === 'en' ? 'Menu' : 'Menu'}</h3>
+                        <div className="space-y-2">
+                          {menuItems.map((item) => {
+                            const IconComponent = item.icon;
+                            return (
+                              <Button
+                                key={item.href}
+                                variant="ghost"
+                                className="w-full justify-start motion-blur"
+                                asChild
+                              >
+                                <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
+                                  <IconComponent className="w-4 h-4 mr-3" />
+                                  {getLabel(item)}
+                                </Link>
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="border-t border-border pt-6">
+                        <ModeSelector currentMode={mode} onModeChange={setMode} />
+                      </div>
+
+                      <div className="border-t border-border pt-6">
+                        <h4 className="text-sm font-semibold mb-3 text-muted-foreground">
+                          {language === 'en' ? 'Management' : 'Gestion'}
+                        </h4>
+                        <div className="space-y-2">
+                          {adminMenuItems.map((item) => {
+                            const IconComponent = item.icon;
+                            return (
+                              <Button
+                                key={item.href}
+                                variant="ghost"
+                                className="w-full justify-start motion-blur"
+                                asChild
+                              >
+                                <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
+                                  <IconComponent className="w-4 h-4 mr-3" />
+                                  {getLabel(item)}
+                                </Link>
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="border-t border-border pt-6">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-muted-foreground"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <Settings className="w-4 h-4 mr-3" />
+                          {language === 'en' ? 'Settings' : 'Paramètres'}
+                        </Button>
                       </div>
                     </div>
-
-                    <div className="border-t border-border pt-6">
-                      <ModeSelector currentMode={mode} onModeChange={setMode} />
-                    </div>
-
-                    <div className="border-t border-border pt-6">
-                      <h4 className="text-sm font-semibold mb-3 text-muted-foreground">
-                        {language === 'en' ? 'Management' : 'Gestion'}
-                      </h4>
-                      <div className="space-y-2">
-                        {adminMenuItems.map((item) => {
-                          const IconComponent = item.icon;
-                          return (
-                            <Button
-                              key={item.href}
-                              variant="ghost"
-                              className="w-full justify-start motion-blur"
-                              asChild
-                            >
-                              <Link to={item.href} onClick={() => setIsMenuOpen(false)}>
-                                <IconComponent className="w-4 h-4 mr-3" />
-                                {getLabel(item)}
-                              </Link>
-                            </Button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="border-t border-border pt-6">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-muted-foreground"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4 mr-3" />
-                        {language === 'en' ? 'Settings' : 'Paramètres'}
-                      </Button>
-                    </div>
-                  </div>
+                  </ScrollArea>
                 </SheetContent>
               </Sheet>
             </div>
