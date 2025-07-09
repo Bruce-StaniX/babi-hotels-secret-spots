@@ -8,6 +8,7 @@ import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield, Cre
 import { Link } from 'react-router-dom';
 import LanguageSwitch from './LanguageSwitch';
 import ModeSelector from './ModeSelector';
+import { SettingsDialog } from './SettingsDialog';
 import { useAppMode } from '@/hooks/useAppMode';
 
 const Navigation = () => {
@@ -126,14 +127,16 @@ const Navigation = () => {
                       </div>
 
                       <div className="border-t border-border pt-6">
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start text-muted-foreground"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Settings className="w-4 h-4 mr-3" />
-                          {language === 'en' ? 'Settings' : 'Paramètres'}
-                        </Button>
+                        <SettingsDialog>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-muted-foreground"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <Settings className="w-4 h-4 mr-3" />
+                            {language === 'en' ? 'Settings' : 'Paramètres'}
+                          </Button>
+                        </SettingsDialog>
                       </div>
                     </div>
                   </ScrollArea>
