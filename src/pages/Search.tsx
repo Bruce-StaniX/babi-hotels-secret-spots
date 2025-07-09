@@ -98,7 +98,7 @@ const Search = () => {
                 <SelectTrigger className="pl-10">
                   <SelectValue placeholder="Filtrer par commune..." />
                 </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-60 overflow-y-auto">
                 <SelectItem value="all">Toutes les communes</SelectItem>
                 {communes.map((commune) => (
                   <SelectItem key={commune} value={commune}>
