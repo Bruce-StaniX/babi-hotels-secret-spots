@@ -85,8 +85,12 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     <div className="min-h-screen bg-gradient-to-br from-background via-card to-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md glass-morphism animate-scale-in">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center animate-float">
-            <IconComponent className="w-8 h-8 text-primary" />
+          <div className="mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center animate-float">
+            <img 
+              src="/lovable-uploads/7166ae21-46de-4d2d-9098-e5e5e3128fb0.png" 
+              alt="Hotro de Babi Logo" 
+              className="w-16 h-16 object-contain"
+            />
           </div>
           <CardTitle className="text-2xl font-bold text-primary">
             {currentStepData.title}
