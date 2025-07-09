@@ -124,7 +124,11 @@ const HotelSpace = () => {
 
           <TabsContent value="dashboard" className="space-y-6">
             <HotelSpaceStatsCards hotels={hotels} />
-            <HotelSpaceQuickActions />
+            <HotelSpaceQuickActions 
+              onViewAnalytics={() => setActiveTab('analytics')}
+              onHotelAdded={fetchUserHotels}
+              userEmail={user?.email}
+            />
           </TabsContent>
 
           <TabsContent value="hotels" className="space-y-4">
