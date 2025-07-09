@@ -9,8 +9,33 @@ import Navigation from '@/components/Navigation';
 const Messages = () => {
   const [activeChat, setActiveChat] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState('');
-
-  const conversations = [
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "hotel",
+      content: "Bonjour ! Merci pour votre réservation à la Villa Romance Cocody.",
+      time: "14:25"
+    },
+    {
+      id: 2,
+      sender: "user",
+      content: "Bonjour, à quelle heure puis-je arriver ?",
+      time: "14:27"
+    },
+    {
+      id: 3,
+      sender: "hotel",
+      content: "Vous pouvez arriver à partir de 15h. Avez-vous des demandes particulières ?",
+      time: "14:28"
+    },
+    {
+      id: 4,
+      sender: "hotel",
+      content: "Merci pour votre réservation !",
+      time: "14:30"
+    }
+  ]);
+  const [conversations, setConversations] = useState([
     {
       id: 1,
       name: "Villa Romance Cocody",
@@ -38,39 +63,89 @@ const Messages = () => {
       avatar: "/lovable-uploads/7166ae21-46de-4d2d-9098-e5e5e3128fb0.png",
       online: true
     }
-  ];
+  ]);
 
-  const messages = [
-    {
-      id: 1,
-      sender: "hotel",
-      content: "Bonjour ! Merci pour votre réservation à la Villa Romance Cocody.",
-      time: "14:25"
-    },
-    {
-      id: 2,
-      sender: "user",
-      content: "Bonjour, à quelle heure puis-je arriver ?",
-      time: "14:27"
-    },
-    {
-      id: 3,
-      sender: "hotel",
-      content: "Vous pouvez arriver à partir de 15h. Avez-vous des demandes particulières ?",
-      time: "14:28"
-    },
-    {
-      id: 4,
-      sender: "hotel",
-      content: "Merci pour votre réservation !",
-      time: "14:30"
-    }
-  ];
+  // Fonction pour obtenir l'heure actuelle au format HH:MM
+  const getCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString('fr-FR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
 
+  // Fonction pour envoyer un message
   const sendMessage = () => {
-    if (newMessage.trim()) {
-      // Logic to send message
+    if (newMessage.trim() && activeChat) {
+      const newMsg = {
+        id: messages.length + 1,
+        sender: "user" as const,
+        content: newMessage.trim(),
+        time: getCurrentTime()
+      };
+
+      // Ajouter le nouveau message
+      setMessages(prev => [...prev, newMsg]);
+
+      // Mettre à jour la conversation avec le dernier message
+      setConversations(prev => 
+        prev.map(conv => 
+          conv.id === activeChat 
+            ? { 
+                ...conv, 
+                lastMessage: newMessage.trim(),
+                time: getCurrentTime(),
+                unread: 0
+              }
+            : conv
+        )
+      );
+
+      // Vider le champ de saisie
       setNewMessage('');
+
+      // Simuler une réponse automatique après 2 secondes
+      setTimeout(() => {
+        const responses = [
+          "Merci pour votre message ! Nous vous répondrons rapidement.",
+          "Message bien reçu ! Un membre de notre équipe va vous répondre.",
+          "Nous avons bien reçu votre demande. Merci !",
+          "Parfait ! Nous prenons note de votre message."
+        ];
+        
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        
+        const autoReply = {
+          id: messages.length + 2,
+          sender: "hotel" as const,
+          content: randomResponse,
+          time: getCurrentTime()
+        };
+
+        setMessages(prev => [...prev, autoReply]);
+        
+        // Mettre à jour la conversation avec la réponse auto
+        setConversations(prev => 
+          prev.map(conv => 
+            conv.id === activeChat 
+              ? { 
+                  ...conv, 
+                  lastMessage: randomResponse,
+                  time: getCurrentTime(),
+                  unread: conv.unread + 1
+                }
+              : conv
+          )
+        );
+      }, 2000);
+    }
+  };
+
+  // Fonction pour gérer l'appui sur Entrée
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
   };
 
@@ -194,10 +269,14 @@ const Messages = () => {
                       placeholder="Tapez votre message..."
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      onKeyPress={handleKeyPress}
                       className="flex-1"
                     />
-                    <Button onClick={sendMessage}>
+                    <Button 
+                      onClick={sendMessage}
+                      disabled={!newMessage.trim()}
+                      className="disabled:opacity-50"
+                    >
                       <Send className="w-4 h-4" />
                     </Button>
                   </div>
