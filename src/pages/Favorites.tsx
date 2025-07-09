@@ -5,9 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Heart, MapPin, Star, Trash2, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import { useAppMode } from '@/hooks/useAppMode';
 
 const Favorites = () => {
   const navigate = useNavigate();
+  const { skipToHomepage } = useAppMode();
   const [favorites, setFavorites] = useState([
     {
       id: 1,
@@ -43,7 +45,10 @@ const Favorites = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate('/')}
+              onClick={() => {
+                skipToHomepage();
+                navigate('/');
+              }}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />

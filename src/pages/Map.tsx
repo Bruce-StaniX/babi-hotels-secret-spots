@@ -5,9 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { MapPin, Navigation as NavigationIcon, Filter, Star, Heart, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import { useAppMode } from '@/hooks/useAppMode';
 
 const Map = () => {
   const navigate = useNavigate();
+  const { skipToHomepage } = useAppMode();
   const [selectedHotel, setSelectedHotel] = useState<number | null>(null);
 
   const hotels = [
@@ -53,7 +55,10 @@ const Map = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate('/')}
+              onClick={() => {
+                skipToHomepage();
+                navigate('/');
+              }}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />

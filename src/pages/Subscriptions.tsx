@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
 const Subscriptions = () => {
-  const { language } = useAppMode();
+  const { language, skipToHomepage } = useAppMode();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -119,6 +119,7 @@ const Subscriptions = () => {
   };
 
   const handleGoBack = () => {
+    skipToHomepage();
     navigate('/'); // Go to homepage
   };
 

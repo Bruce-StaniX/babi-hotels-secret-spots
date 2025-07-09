@@ -85,6 +85,10 @@ export const useAppMode = () => {
     setState(prev => ({ ...prev, isOnboardingComplete: true }));
   };
 
+  const skipToHomepage = () => {
+    setState(prev => ({ ...prev, isOnboardingComplete: true }));
+  };
+
   const clearPrivateData = () => {
     if (state.mode === 'private') {
       // Clear localStorage except for essential app state
@@ -110,6 +114,7 @@ export const useAppMode = () => {
     setMode,
     setLanguage,
     completeOnboarding,
+    skipToHomepage,
     clearPrivateData
   };
 };
