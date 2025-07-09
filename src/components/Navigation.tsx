@@ -14,14 +14,14 @@ const Navigation = () => {
   const { mode, language, setMode, setLanguage, isPrivacyModeActive } = useAppMode();
 
   const menuItems = [
-    { icon: Search, label: 'Recherche', href: '/search' },
-    { icon: Heart, label: 'Favoris', href: '/favorites' },
-    { icon: MessageCircle, label: 'Messages', href: '/messages' },
-    { icon: MapPin, label: 'Carte', href: '/map' },
-    { icon: User, label: 'Profil', href: '/profile' },
+    { icon: Search, label: 'Recherche', labelEn: 'Search', href: '/search' },
+    { icon: Heart, label: 'Favoris', labelEn: 'Favorites', href: '/favorites' },
+    { icon: MessageCircle, label: 'Messages', labelEn: 'Messages', href: '/messages' },
+    { icon: MapPin, label: 'Carte', labelEn: 'Map', href: '/map' },
+    { icon: User, label: 'Profil', labelEn: 'Profile', href: '/profile' },
   ];
 
-  const getLabel = (item: any) => item.label;
+  const getLabel = (item: any) => language === 'en' ? item.labelEn : item.label;
 
   return (
     <>
@@ -68,7 +68,7 @@ const Navigation = () => {
                 <SheetContent side="right" className="w-80 glass-morphism">
                   <div className="space-y-6 mt-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Menu</h3>
+                      <h3 className="text-lg font-semibold mb-4">{language === 'en' ? 'Menu' : 'Menu'}</h3>
                       <div className="space-y-2">
                         {menuItems.map((item) => {
                           const IconComponent = item.icon;
@@ -100,7 +100,7 @@ const Navigation = () => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <Settings className="w-4 h-4 mr-3" />
-                        Paramètres
+                        {language === 'en' ? 'Settings' : 'Paramètres'}
                       </Button>
                     </div>
                   </div>
