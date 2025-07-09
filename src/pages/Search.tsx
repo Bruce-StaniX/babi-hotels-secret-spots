@@ -1,41 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search as SearchIcon, MapPin, Star, Filter, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import { searchHotels, communes, Hotel, getCommuneDisplayName } from '@/data/hotelsData';
 
 const Search = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
     priceRange: 'all',
     rating: 'all'
   });
+  const [searchResults, setSearchResults] = useState<Hotel[]>([]);
 
-  const searchResults = [
-    {
-      id: 1,
-      name: "Villa Romance Cocody",
-      location: "Cocody",
-      price: "25000",
-      rating: 4.8,
-      image: "/lovable-uploads/7166ae21-46de-4d2d-9098-e5e5e3128fb0.png",
-      features: ["Piscine privée", "Jacuzzi", "Vue panoramique"]
-    },
-    {
-      id: 2,
-      name: "Suite Présidentielle Plateau",
-      location: "Plateau",
-      price: "35000",
-      rating: 4.9,
-      image: "/lovable-uploads/7166ae21-46de-4d2d-9098-e5e5e3128fb0.png",
-      features: ["Balcon privé", "Service room", "Petit déjeuner"]
+  // Effet pour récupérer les paramètres d'URL et effectuer la recherche
+  useEffect(() => {
+    const locationParam = searchParams.get('location');
+    const dateParam = searchParams.get('date');
+    const guestsParam = searchParams.get('guests');
+
+    if (locationParam) {
+      setFilters(prev => ({ ...prev, location: locationParam }));
     }
-  ];
+
+    // Effectuer la recherche avec les paramètres
+    const results = searchHotels(searchQuery, locationParam || filters.location);
+    setSearchResults(results);
+  }, [searchParams, searchQuery, filters.location]);
+
+  const handleLocationChange = (location: string) => {
+    setFilters(prev => ({ ...prev, location }));
+    const results = searchHotels(searchQuery, location);
+    setSearchResults(results);
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    const results = searchHotels(query, filters.location);
+    setSearchResults(results);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,9 +77,29 @@ const Search = () => {
             <Input
               placeholder="Rechercher un hébergement..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10"
             />
+          </div>
+        </div>
+
+        {/* Location Filter */}
+        <div className="mb-6">
+          <div className="relative">
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 z-10" />
+            <Select value={filters.location} onValueChange={handleLocationChange}>
+              <SelectTrigger className="pl-10">
+                <SelectValue placeholder="Filtrer par commune..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Toutes les communes</SelectItem>
+                {communes.map((commune) => (
+                  <SelectItem key={commune} value={commune}>
+                    {getCommuneDisplayName(commune)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -126,7 +157,7 @@ const Search = () => {
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-primary">{hotel.price} FCFA</span>
+                      <span className="text-lg font-bold text-primary">{hotel.price.toLocaleString()} FCFA</span>
                       <Button size="sm">Voir détails</Button>
                     </div>
                   </div>
