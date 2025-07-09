@@ -66,13 +66,26 @@ const HeroSection = () => {
                     <SelectValue placeholder="Abidjan, Yamoussoukro..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="abidjan">Abidjan</SelectItem>
-                    <SelectItem value="yamoussoukro">Yamoussoukro</SelectItem>
-                    <SelectItem value="bouake">Bouaké</SelectItem>
-                    <SelectItem value="daloa">Daloa</SelectItem>
-                    <SelectItem value="san-pedro">San-Pédro</SelectItem>
-                    <SelectItem value="korhogo">Korhogo</SelectItem>
-                    <SelectItem value="man">Man</SelectItem>
+                    <SelectItem value="abobo">Abobo</SelectItem>
+                    <SelectItem value="adjame">Adjamé</SelectItem>
+                    <SelectItem value="alepe">Alépé</SelectItem>
+                    <SelectItem value="anyama">Anyama</SelectItem>
+                    <SelectItem value="assinie">Assinie</SelectItem>
+                    <SelectItem value="attecoube">Attécoubé</SelectItem>
+                    <SelectItem value="azaguie">Azaguié</SelectItem>
+                    <SelectItem value="bingerville">Bingerville</SelectItem>
+                    <SelectItem value="bonoua">Bonoua</SelectItem>
+                    <SelectItem value="cocody">Cocody</SelectItem>
+                    <SelectItem value="dabou">Dabou</SelectItem>
+                    <SelectItem value="grand-bassam">Grand-Bassam</SelectItem>
+                    <SelectItem value="jacqueville">Jacqueville</SelectItem>
+                    <SelectItem value="koumassi">Koumassi</SelectItem>
+                    <SelectItem value="marcory">Marcory</SelectItem>
+                    <SelectItem value="plateau">Plateau</SelectItem>
+                    <SelectItem value="port-bouet">Port-Bouët</SelectItem>
+                    <SelectItem value="songon">Songon</SelectItem>
+                    <SelectItem value="treichville">Treichville</SelectItem>
+                    <SelectItem value="yopougon">Yopougon</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
