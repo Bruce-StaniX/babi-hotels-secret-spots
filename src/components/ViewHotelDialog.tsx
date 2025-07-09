@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAppMode } from '@/hooks/useAppMode';
 import { MapPin, Star, Users, Wifi, Car, Coffee, Shield, X } from 'lucide-react';
 import { Hotel } from '@/data/hotelsData';
+import { BookingDialog } from '@/components/BookingDialog';
+import { ContactHotelDialog } from '@/components/ContactHotelDialog';
 
 interface ViewHotelDialogProps {
   open: boolean;
@@ -13,6 +16,8 @@ interface ViewHotelDialogProps {
 
 export const ViewHotelDialog = ({ open, onOpenChange, hotel }: ViewHotelDialogProps) => {
   const { language } = useAppMode();
+  const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
 
   if (!hotel) return null;
 
@@ -92,7 +97,11 @@ export const ViewHotelDialog = ({ open, onOpenChange, hotel }: ViewHotelDialogPr
                 </div>
               </div>
               
-              <Button className="w-full gradient-ivorian" size="lg">
+              <Button 
+                className="w-full gradient-ivorian" 
+                size="lg"
+                onClick={() => setBookingDialogOpen(true)}
+              >
                 {language === 'en' ? 'Book Now' : 'Réserver Maintenant'}
               </Button>
             </div>
@@ -163,14 +172,35 @@ export const ViewHotelDialog = ({ open, onOpenChange, hotel }: ViewHotelDialogPr
 
           {/* Boutons d'action */}
           <div className="flex gap-3 pt-4">
-            <Button className="flex-1 gradient-ivorian" size="lg">
+            <Button 
+              className="flex-1 gradient-ivorian" 
+              size="lg"
+              onClick={() => setBookingDialogOpen(true)}
+            >
               {language === 'en' ? 'Reserve Now' : 'Réserver Maintenant'}
             </Button>
-            <Button variant="outline" size="lg">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => setContactDialogOpen(true)}
+            >
               {language === 'en' ? 'Contact Hotel' : 'Contacter l\'Hôtel'}
             </Button>
           </div>
         </div>
+
+        {/* Dialogs enfants */}
+        <BookingDialog 
+          open={bookingDialogOpen}
+          onOpenChange={setBookingDialogOpen}
+          hotel={hotel}
+        />
+        
+        <ContactHotelDialog 
+          open={contactDialogOpen}
+          onOpenChange={setContactDialogOpen}
+          hotel={hotel}
+        />
       </DialogContent>
     </Dialog>
   );
