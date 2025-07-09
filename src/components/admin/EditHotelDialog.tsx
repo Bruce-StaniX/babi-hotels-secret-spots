@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Edit } from 'lucide-react';
 import { Tables } from '@/integrations/supabase/types';
+import { ImageUpload } from '@/components/ImageUpload';
 
 type Hotel = Tables<'hotels'>;
 
@@ -36,7 +37,7 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
     admin_notes: '',
     rating: 0,
     amenities: [] as string[],
-    images: ''
+    images: [] as string[]
   });
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
         admin_notes: hotel.admin_notes || '',
         rating: hotel.rating || 0,
         amenities: hotel.amenities || [],
-        images: hotel.images ? hotel.images.join(', ') : ''
+        images: hotel.images || []
       });
     }
   }, [open, hotel]);
@@ -63,12 +64,6 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
     setLoading(true);
 
     try {
-      // Process images URLs
-      const imageUrls = formData.images
-        .split(',')
-        .map(url => url.trim())
-        .filter(url => url.length > 0);
-
       const updateData: any = {
         name: formData.name,
         description: formData.description,
@@ -81,7 +76,7 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
         admin_notes: formData.admin_notes,
         rating: formData.rating,
         amenities: formData.amenities,
-        images: imageUrls.length > 0 ? imageUrls : null
+        images: formData.images.length > 0 ? formData.images : null
       };
 
       // Add approved_at if status is being changed to approved
@@ -282,27 +277,12 @@ const EditHotelDialog = ({ children, hotel, onHotelUpdated }: EditHotelDialogPro
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="images">
-              {language === 'en' ? 'Photos (URLs)' : 'Photos (URLs)'}
-            </Label>
-            <Textarea
-              id="images"
-              value={formData.images}
-              onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-              rows={3}
-              placeholder={language === 'en' 
-                ? 'Enter image URLs separated by commas...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
-                : 'Entrez les URLs des images séparées par des virgules...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
-              }
-            />
-            <p className="text-xs text-muted-foreground">
-              {language === 'en' 
-                ? 'Separate multiple image URLs with commas. First image will be the main photo.'
-                : 'Séparez les URLs des images par des virgules. La première image sera la photo principale.'
-              }
-            </p>
-          </div>
+          <ImageUpload
+            images={formData.images}
+            onImagesChange={(images) => setFormData({ ...formData, images })}
+            maxImages={10}
+            label={language === 'en' ? 'Hotel Photos' : 'Photos de l\'Hôtel'}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="admin_notes">

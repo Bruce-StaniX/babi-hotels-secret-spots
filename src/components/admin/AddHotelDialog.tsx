@@ -9,6 +9,7 @@ import { useAppMode } from '@/hooks/useAppMode';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus } from 'lucide-react';
+import { ImageUpload } from '@/components/ImageUpload';
 
 interface AddHotelDialogProps {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ const AddHotelDialog = ({ children, onHotelAdded }: AddHotelDialogProps) => {
     website: '',
     status: 'approved' as 'approved' | 'pending' | 'active',
     admin_notes: '',
-    images: ''
+    images: [] as string[]
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,17 +42,11 @@ const AddHotelDialog = ({ children, onHotelAdded }: AddHotelDialogProps) => {
       // Generate a dummy user_id for admin-created hotels
       const dummyUserId = crypto.randomUUID();
       
-      // Process images URLs
-      const imageUrls = formData.images
-        .split(',')
-        .map(url => url.trim())
-        .filter(url => url.length > 0);
-
       const { error } = await supabase
         .from('hotels')
         .insert({
           ...formData,
-          images: imageUrls.length > 0 ? imageUrls : null,
+          images: formData.images.length > 0 ? formData.images : null,
           owner_id: dummyUserId,
           approved_at: formData.status === 'approved' ? new Date().toISOString() : null
         });
@@ -74,7 +69,7 @@ const AddHotelDialog = ({ children, onHotelAdded }: AddHotelDialogProps) => {
         website: '',
         status: 'approved',
         admin_notes: '',
-        images: ''
+        images: [] as string[]
       });
       
       if (onHotelAdded) onHotelAdded();
@@ -216,27 +211,12 @@ const AddHotelDialog = ({ children, onHotelAdded }: AddHotelDialogProps) => {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="images">
-              {language === 'en' ? 'Photos (URLs)' : 'Photos (URLs)'}
-            </Label>
-            <Textarea
-              id="images"
-              value={formData.images}
-              onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-              rows={3}
-              placeholder={language === 'en' 
-                ? 'Enter image URLs separated by commas...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
-                : 'Entrez les URLs des images séparées par des virgules...\nhttps://example.com/image1.jpg, https://example.com/image2.jpg'
-              }
-            />
-            <p className="text-xs text-muted-foreground">
-              {language === 'en' 
-                ? 'Separate multiple image URLs with commas. First image will be the main photo.'
-                : 'Séparez les URLs des images par des virgules. La première image sera la photo principale.'
-              }
-            </p>
-          </div>
+          <ImageUpload
+            images={formData.images}
+            onImagesChange={(images) => setFormData({ ...formData, images })}
+            maxImages={10}
+            label={language === 'en' ? 'Hotel Photos' : 'Photos de l\'Hôtel'}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="admin_notes">
