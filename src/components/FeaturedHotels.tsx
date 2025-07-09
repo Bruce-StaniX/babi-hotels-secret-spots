@@ -1,7 +1,9 @@
 
 import HotelCard from "./HotelCard";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedHotels = () => {
+  const navigate = useNavigate();
   const hotels = [
     {
       id: "1",
@@ -90,7 +92,10 @@ const FeaturedHotels = () => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-ivorian-orange text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-ivorian-orange-light transition-colors duration-300 transform hover:scale-105">
+          <button 
+            onClick={() => navigate('/search')}
+            className="bg-ivorian-orange text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-ivorian-orange-light transition-colors duration-300 transform hover:scale-105"
+          >
             Voir tous les hébergements
           </button>
         </div>
