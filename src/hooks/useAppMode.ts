@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 type AppMode = 'normal' | 'couple' | 'private';
-type Language = 'fr' | 'nouchi';
+type Language = 'fr';
 
 interface AppState {
   mode: AppMode;

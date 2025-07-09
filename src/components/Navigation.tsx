@@ -14,14 +14,14 @@ const Navigation = () => {
   const { mode, language, setMode, setLanguage, isPrivacyModeActive } = useAppMode();
 
   const menuItems = [
-    { icon: Search, label: 'Recherche', labelNouchi: 'Chercher', href: '/search' },
-    { icon: Heart, label: 'Favoris', labelNouchi: 'Mes favoris', href: '/favorites' },
-    { icon: MessageCircle, label: 'Messages', labelNouchi: 'Messages', href: '/messages' },
-    { icon: MapPin, label: 'Carte', labelNouchi: 'Map', href: '/map' },
-    { icon: User, label: 'Profil', labelNouchi: 'Mon profil', href: '/profile' },
+    { icon: Search, label: 'Recherche', href: '/search' },
+    { icon: Heart, label: 'Favoris', href: '/favorites' },
+    { icon: MessageCircle, label: 'Messages', href: '/messages' },
+    { icon: MapPin, label: 'Carte', href: '/map' },
+    { icon: User, label: 'Profil', href: '/profile' },
   ];
 
-  const getLabel = (item: any) => language === 'nouchi' ? item.labelNouchi : item.label;
+  const getLabel = (item: any) => item.label;
 
   return (
     <>
@@ -100,7 +100,7 @@ const Navigation = () => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <Settings className="w-4 h-4 mr-3" />
-                        {language === 'nouchi' ? 'Paramètres' : 'Paramètres'}
+                        Paramètres
                       </Button>
                     </div>
                   </div>
