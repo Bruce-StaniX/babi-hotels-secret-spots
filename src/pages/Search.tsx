@@ -37,8 +37,9 @@ const Search = () => {
   }, [searchParams, searchQuery, filters.location]);
 
   const handleLocationChange = (location: string) => {
-    setFilters(prev => ({ ...prev, location }));
-    const results = searchHotels(searchQuery, location);
+    const actualLocation = location === "all" ? "" : location;
+    setFilters(prev => ({ ...prev, location: actualLocation }));
+    const results = searchHotels(searchQuery, actualLocation);
     setSearchResults(results);
   };
 
@@ -92,7 +93,7 @@ const Search = () => {
                 <SelectValue placeholder="Filtrer par commune..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les communes</SelectItem>
+                <SelectItem value="all">Toutes les communes</SelectItem>
                 {communes.map((commune) => (
                   <SelectItem key={commune} value={commune}>
                     {getCommuneDisplayName(commune)}

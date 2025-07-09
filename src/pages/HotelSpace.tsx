@@ -21,7 +21,8 @@ const HotelSpace = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    const results = searchHotels(searchQuery, selectedLocation);
+    const actualLocation = selectedLocation === "all" ? "" : selectedLocation;
+    const results = searchHotels(searchQuery, actualLocation);
     setFilteredHotels(results);
   }, [searchQuery, selectedLocation]);
 
@@ -58,7 +59,7 @@ const HotelSpace = () => {
                   <SelectValue placeholder="Toutes les communes" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Toutes les communes</SelectItem>
+                  <SelectItem value="all">Toutes les communes</SelectItem>
                   {communes.map((commune) => (
                     <SelectItem key={commune} value={commune}>
                       {getCommuneDisplayName(commune)}
