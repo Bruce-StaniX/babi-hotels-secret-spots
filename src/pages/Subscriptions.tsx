@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import { Check, CreditCard, Star, Crown, Building2 } from 'lucide-react';
+import { Check, CreditCard, Star, Crown, Building2, ArrowLeft, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Navigation from '@/components/Navigation';
+import ContactDialog from '@/components/ContactDialog';
 import { useAppMode } from '@/hooks/useAppMode';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Subscriptions = () => {
   const { language } = useAppMode();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
   const plans = [
@@ -81,8 +86,40 @@ const Subscriptions = () => {
   ];
 
   const handleSubscribe = (planId: string) => {
-    console.log(`Subscribing to ${planId} plan`);
-    // TODO: Implement Stripe integration
+    switch (planId) {
+      case 'freemium':
+        // Redirect to hotel space registration
+        toast({
+          title: language === 'en' ? 'Welcome to Freemium!' : 'Bienvenue dans Freemium !',
+          description: language === 'en' 
+            ? 'Create your hotel profile to get started.' 
+            : 'Créez votre profil hôtelier pour commencer.',
+        });
+        navigate('/hotel-space');
+        break;
+        
+      case 'premium':
+        // TODO: Integrate with Stripe for Premium subscription
+        toast({
+          title: language === 'en' ? 'Premium Subscription' : 'Abonnement Premium',
+          description: language === 'en' 
+            ? 'Stripe integration coming soon. Contact us for early access.' 
+            : 'Intégration Stripe bientôt disponible. Contactez-nous pour un accès anticipé.',
+        });
+        console.log('Premium subscription - Stripe integration needed');
+        break;
+        
+      case 'enterprise':
+        // This will be handled by the Contact Sales dialog
+        break;
+        
+      default:
+        console.log(`Unknown plan: ${planId}`);
+    }
+  };
+
+  const handleGoBack = () => {
+    navigate(-1); // Go back to previous page
   };
 
   return (
@@ -90,6 +127,18 @@ const Subscriptions = () => {
       <Navigation />
       
       <div className="container mx-auto px-4 py-12">
+        {/* Back Button */}
+        <div className="mb-8">
+          <Button 
+            variant="ghost" 
+            onClick={handleGoBack}
+            className="motion-blur"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'Back' : 'Retour'}
+          </Button>
+        </div>
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">
             {language === 'en' ? 'Hotel Subscription Plans' : 'Plans d\'abonnement hôteliers'}
@@ -208,14 +257,33 @@ const Subscriptions = () => {
                 </CardContent>
 
                 <CardFooter>
-                  <Button
-                    className="w-full motion-blur"
-                    variant={plan.buttonVariant}
-                    onClick={() => handleSubscribe(plan.id)}
-                  >
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    {plan.buttonText}
-                  </Button>
+                  {plan.id === 'enterprise' ? (
+                    <ContactDialog
+                      type="sales"
+                      trigger={
+                        <Button
+                          className="w-full motion-blur"
+                          variant={plan.buttonVariant}
+                        >
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          {plan.buttonText}
+                        </Button>
+                      }
+                    />
+                  ) : (
+                    <Button
+                      className="w-full motion-blur"
+                      variant={plan.buttonVariant}
+                      onClick={() => handleSubscribe(plan.id)}
+                    >
+                      {plan.id === 'freemium' ? (
+                        <UserPlus className="w-4 h-4 mr-2" />
+                      ) : (
+                        <CreditCard className="w-4 h-4 mr-2" />
+                      )}
+                      {plan.buttonText}
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             );
@@ -233,9 +301,14 @@ const Subscriptions = () => {
               : 'Besoin d\'aide pour choisir le bon plan ? Notre équipe est là pour vous aider.'
             }
           </p>
-          <Button variant="outline" className="motion-blur">
-            {language === 'en' ? 'Contact Support' : 'Contacter le support'}
-          </Button>
+          <ContactDialog
+            type="support"
+            trigger={
+              <Button variant="outline" className="motion-blur">
+                {language === 'en' ? 'Contact Support' : 'Contacter le support'}
+              </Button>
+            }
+          />
         </div>
       </div>
     </div>
