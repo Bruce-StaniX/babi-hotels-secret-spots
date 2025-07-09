@@ -161,7 +161,7 @@ const Messages = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/')}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />

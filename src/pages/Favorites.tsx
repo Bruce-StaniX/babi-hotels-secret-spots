@@ -43,7 +43,7 @@ const Favorites = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
+              onClick={() => navigate('/')}
               className="mr-3"
             >
               <ArrowLeft className="w-4 h-4" />

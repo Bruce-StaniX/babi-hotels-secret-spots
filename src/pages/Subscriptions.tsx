@@ -119,7 +119,7 @@ const Subscriptions = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Go back to previous page
+    navigate('/'); // Go to homepage
   };
 
   return (
