@@ -11,6 +11,7 @@ import Map from "./pages/Map";
 import Profile from "./pages/Profile";
 import HotelSpace from "./pages/HotelSpace";
 import Admin from "./pages/Admin";
+import Subscriptions from "./pages/Subscriptions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/hotel-space" element={<HotelSpace />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

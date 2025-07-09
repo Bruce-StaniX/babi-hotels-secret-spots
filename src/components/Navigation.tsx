@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield } from 'lucide-react';
+import { Menu, Search, Heart, User, MessageCircle, MapPin, Settings, Shield, CreditCard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LanguageSwitch from './LanguageSwitch';
 import ModeSelector from './ModeSelector';
@@ -24,6 +24,7 @@ const Navigation = () => {
 
   const adminMenuItems = [
     { icon: Settings, label: 'Espace Hôtelier', labelEn: 'Hotel Space', href: '/hotel-space' },
+    { icon: CreditCard, label: 'Abonnements', labelEn: 'Subscriptions', href: '/subscriptions' },
     { icon: Shield, label: 'Admin', labelEn: 'Admin', href: '/admin' },
   ];
 
