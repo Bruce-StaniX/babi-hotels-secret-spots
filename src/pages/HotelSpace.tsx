@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Plus, Hotel, BarChart3, Settings, Eye, Edit, TrendingUp, Users, Calendar } from 'lucide-react';
@@ -25,6 +27,8 @@ const HotelSpace = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [email, setEmail] = useState('');
+  const [signingIn, setSigningIn] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -73,10 +77,22 @@ const HotelSpace = () => {
     }
   };
 
-  const signInWithEmail = async () => {
+  const signInWithEmail = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    
+    if (!email) {
+      toast({
+        title: language === 'en' ? 'Error' : 'Erreur',
+        description: language === 'en' ? 'Please enter your email address' : 'Veuillez saisir votre adresse email',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setSigningIn(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        email: 'demo@example.com', // Placeholder for demo
+        email,
         options: {
           emailRedirectTo: window.location.origin + '/hotel-space'
         }
@@ -88,8 +104,15 @@ const HotelSpace = () => {
         title: language === 'en' ? 'Check your email' : 'Vérifiez votre email',
         description: language === 'en' ? 'A sign-in link has been sent to your email' : 'Un lien de connexion a été envoyé à votre email',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign in error:', error);
+      toast({
+        title: language === 'en' ? 'Error' : 'Erreur',
+        description: error.message || (language === 'en' ? 'Failed to send sign-in link' : 'Impossible d\'envoyer le lien de connexion'),
+        variant: 'destructive',
+      });
+    } finally {
+      setSigningIn(false);
     }
   };
 
@@ -171,9 +194,28 @@ const HotelSpace = () => {
                   ? 'Please sign in to access your hotel management dashboard' 
                   : 'Veuillez vous connecter pour accéder à votre tableau de bord hôtelier'}
               </p>
-              <Button onClick={signInWithEmail} className="w-full">
-                {language === 'en' ? 'Sign In with Email' : 'Se connecter par Email'}
-              </Button>
+              <form onSubmit={signInWithEmail} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">
+                    {language === 'en' ? 'Email Address' : 'Adresse Email'}
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={language === 'en' ? 'Enter your email' : 'Saisissez votre email'}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={signingIn}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={signingIn}>
+                  {signingIn 
+                    ? (language === 'en' ? 'Sending...' : 'Envoi...') 
+                    : (language === 'en' ? 'Sign In with Email' : 'Se connecter par Email')
+                  }
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </div>
