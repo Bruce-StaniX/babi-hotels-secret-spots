@@ -86,7 +86,9 @@ export const useAppMode = () => {
   };
 
   const skipToHomepage = () => {
-    setState(prev => ({ ...prev, isOnboardingComplete: true }));
+    const newState = { ...state, isOnboardingComplete: true };
+    setState(newState);
+    localStorage.setItem('hotro-app-state', JSON.stringify(newState));
   };
 
   const clearPrivateData = () => {
