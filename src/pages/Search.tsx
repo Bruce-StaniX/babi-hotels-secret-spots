@@ -25,6 +25,8 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
+  const [sortBy, setSortBy] = useState<'default' | 'rating' | 'proximity'>('default');
+  const [showFilters, setShowFilters] = useState(false);
 
   // Effet pour récupérer les paramètres d'URL et effectuer la recherche
   useEffect(() => {
@@ -52,6 +54,49 @@ const Search = () => {
     setSearchQuery(query);
     const results = searchHotels(query, filters.location);
     setSearchResults(results);
+  };
+
+  const sortResults = (results: Hotel[], sortType: 'default' | 'rating' | 'proximity') => {
+    const sorted = [...results];
+    switch (sortType) {
+      case 'rating':
+        return sorted.sort((a, b) => b.rating - a.rating);
+      case 'proximity':
+        // Pour l'instant, on simule le tri par proximité avec un ordre aléatoire
+        // En réalité, il faudrait la géolocalisation de l'utilisateur
+        return sorted.sort(() => Math.random() - 0.5);
+      default:
+        return sorted;
+    }
+  };
+
+  const handleSortByRating = () => {
+    const newSortBy = sortBy === 'rating' ? 'default' : 'rating';
+    setSortBy(newSortBy);
+    const sortedResults = sortResults(searchResults, newSortBy);
+    setSearchResults(sortedResults);
+  };
+
+  const handleSortByProximity = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          const newSortBy = sortBy === 'proximity' ? 'default' : 'proximity';
+          setSortBy(newSortBy);
+          const sortedResults = sortResults(searchResults, newSortBy);
+          setSearchResults(sortedResults);
+        },
+        () => {
+          alert('Veuillez autoriser la géolocalisation pour trier par proximité');
+        }
+      );
+    } else {
+      alert('La géolocalisation n\'est pas supportée par votre navigateur');
+    }
+  };
+
+  const handleToggleFilters = () => {
+    setShowFilters(!showFilters);
   };
 
   return (
@@ -123,19 +168,74 @@ const Search = () => {
 
           {/* Filters */}
           <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant={showFilters ? "default" : "outline"} 
+              size="sm"
+              onClick={handleToggleFilters}
+            >
               <Filter className="w-4 h-4 mr-2" />
               Filtres
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant={sortBy === 'proximity' ? "default" : "outline"} 
+              size="sm"
+              onClick={handleSortByProximity}
+            >
               <MapPin className="w-4 h-4 mr-2" />
               Près de moi
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant={sortBy === 'rating' ? "default" : "outline"} 
+              size="sm"
+              onClick={handleSortByRating}
+            >
               <Star className="w-4 h-4 mr-2" />
               Mieux notés
             </Button>
           </div>
+
+          {/* Extended Filters */}
+          {showFilters && (
+            <div className="mb-6 p-4 border rounded-lg bg-card">
+              <h3 className="font-medium mb-3">Filtres avancés</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Gamme de prix</label>
+                  <Select 
+                    value={filters.priceRange} 
+                    onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sélectionnez une gamme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous les prix</SelectItem>
+                      <SelectItem value="budget">Budget (&lt; 25,000 FCFA)</SelectItem>
+                      <SelectItem value="mid">Moyen (25,000 - 50,000 FCFA)</SelectItem>
+                      <SelectItem value="luxury">Luxe (&gt; 50,000 FCFA)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Note minimum</label>
+                  <Select 
+                    value={filters.rating} 
+                    onValueChange={(value) => setFilters(prev => ({ ...prev, rating: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Note minimum" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les notes</SelectItem>
+                      <SelectItem value="4">4+ étoiles</SelectItem>
+                      <SelectItem value="3">3+ étoiles</SelectItem>
+                      <SelectItem value="2">2+ étoiles</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Results */}
           <div className="space-y-4">
